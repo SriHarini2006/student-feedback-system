@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Feedback System</title>
+</head>
+<body>
+
+    <h1>Student Feedback System</h1>
+
+    <form method="POST">
+
+        <label>Student Name:</label><br>
+        <input type="text" name="name" required><br><br>
+
+        <label>Register Number:</label><br>
+        <input type="text" name="register_number" required><br><br>
+
+        <label>Department:</label><br>
+        <input type="text" name="department" required><br><br>
+
+        <label>Rating:</label><br>
+        <select name="rating" required>
+            <option value="">Select Rating</option>
+            <option value="5">Excellent</option>
+            <option value="4">Very Good</option>
+            <option value="3">Good</option>
+            <option value="2">Average</option>
+            <option value="1">Poor</option>
+        </select><br><br>
+
+        <label>Feedback:</label><br>
+        <textarea name="feedback" rows="5" cols="40" required></textarea><br><br>
+
+        <button type="submit">Submit Feedback</button>
+
+    </form>
+
+</body>
+</html>
