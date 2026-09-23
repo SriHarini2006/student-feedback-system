@@ -1,0 +1,545 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Student Feedback Management System{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Hero Section */
+  .hero-section {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #1e293b 100%);
+    color: var(--white);
+    padding: 5rem 1.5rem 5.5rem 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    max-width: 820px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.5px;
+    color: #e0e7ff;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+    background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: #cbd5e1;
+    margin-bottom: 2.25rem;
+    font-weight: 400;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1.25rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: 0.85rem 1.85rem;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: var(--transition);
+  }
+
+  .btn-primary {
+    background: #4f46e5;
+    color: var(--white);
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+  }
+
+  .btn-primary:hover {
+    background: #4338ca;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+  }
+
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--white);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(4px);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.22);
+    transform: translateY(-2px);
+  }
+
+  /* Section Styling */
+  .section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4.5rem 1.5rem;
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 3rem auto;
+  }
+
+  .section-badge {
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    display: inline-block;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--slate-800);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-subtitle {
+    font-size: 1.05rem;
+    color: var(--slate-600);
+  }
+
+  /* Features Grid (6 Cards) */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.75rem;
+  }
+
+  .feature-card {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 2rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: #c7d2fe;
+  }
+
+  .feature-icon-wrapper {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    margin-bottom: 1.25rem;
+    background: var(--primary-light);
+  }
+
+  .feature-card:nth-child(1) .feature-icon-wrapper { background: #eff6ff; }
+  .feature-card:nth-child(2) .feature-icon-wrapper { background: #f0fdf4; }
+  .feature-card:nth-child(3) .feature-icon-wrapper { background: #f0f9ff; }
+  .feature-card:nth-child(4) .feature-icon-wrapper { background: #fef3c7; }
+  .feature-card:nth-child(5) .feature-icon-wrapper { background: #f5f3ff; }
+  .feature-card:nth-child(6) .feature-icon-wrapper { background: #ecfdf5; }
+
+  .feature-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--slate-800);
+    margin-bottom: 0.65rem;
+  }
+
+  .feature-card p {
+    color: var(--slate-600);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* DevOps Workflow Section */
+  .devops-section {
+    background: #0f172a;
+    color: var(--white);
+    border-radius: 20px;
+    padding: 3.5rem 2rem;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .devops-section .section-title {
+    color: var(--white);
+  }
+
+  .devops-section .section-subtitle {
+    color: #94a3b8;
+  }
+
+  .workflow-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+    position: relative;
+  }
+
+  .workflow-step {
+    flex: 1;
+    min-width: 200px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 14px;
+    padding: 1.75rem 1.25rem;
+    text-align: center;
+    transition: var(--transition);
+  }
+
+  .workflow-step:hover {
+    border-color: #6366f1;
+    transform: translateY(-4px);
+    background: #243048;
+  }
+
+  .step-icon {
+    font-size: 2.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .step-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #818cf8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+  }
+
+  .step-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+
+  .step-desc {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    line-height: 1.5;
+  }
+
+  .workflow-connector {
+    font-size: 1.8rem;
+    color: #6366f1;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* About Section */
+  .about-container {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 3rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .about-text h3 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--slate-800);
+    margin-bottom: 1rem;
+  }
+
+  .about-text p {
+    color: var(--slate-600);
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .about-points {
+    list-style: none;
+    margin-top: 1.25rem;
+  }
+
+  .about-points li {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: var(--slate-800);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .check-icon {
+    color: var(--accent);
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+
+  .about-card-badge {
+    background: #f8fafc;
+    border: 2px dashed #cbd5e1;
+    border-radius: var(--radius);
+    padding: 2.25rem;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--primary);
+  }
+
+  .stat-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--slate-500);
+  }
+
+  @media (max-width: 900px) {
+    .workflow-connector {
+      display: none;
+    }
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-title {
+      font-size: 2.25rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-tag">
+        <span>🚀</span> DevOps Powered Continuous Delivery
+      </div>
+      <h1 class="hero-title">Student Feedback Management System</h1>
+      <p class="hero-subtitle">Making student feedback collection simple, organized and automated.</p>
+      
+      <div class="hero-actions">
+        <a href="{{ url_for('feedback') }}" class="btn btn-primary">
+          <span>✍️</span> Give Feedback
+        </a>
+        <a href="{{ url_for('view_feedback') }}" class="btn btn-secondary">
+          <span>📋</span> View Feedback
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section (6 Cards) -->
+  <section class="section-container">
+    <div class="section-header">
+      <span class="section-badge">Key Capabilities</span>
+      <h2 class="section-title">Core System Features</h2>
+      <p class="section-subtitle">A balanced fusion of straightforward student experience and production-grade DevOps practices.</p>
+    </div>
+
+    <div class="features-grid">
+      <!-- Card 1 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">📝</div>
+        <h3>Easy Feedback Submission</h3>
+        <p>A clean, friendly form allowing students to submit department, rating, and constructive thoughts in seconds without confusing logins.</p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">🗂️</div>
+        <h3>Organized Feedback Storage</h3>
+        <p>Reliable file-based persistence storing entries cleanly inside <code>feedback.txt</code> with timestamps and structured fields for easy auditing.</p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">🐳</div>
+        <h3>Dockerized Application</h3>
+        <p>Packaged into an isolated, lightweight container image. Runs reliably across any developer laptop, testing server, or cloud node without dependencies.</p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">⚙️</div>
+        <h3>Jenkins Automation</h3>
+        <p>Continuous Integration and Continuous Deployment pipeline automated via <code>Jenkinsfile</code> to build, test, and deploy seamlessly.</p>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">🐙</div>
+        <h3>GitHub Version Control</h3>
+        <p>Structured Git repository with clean commit history, ready for GitHub collaboration, pull requests, and automated webhook triggers.</p>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">🚀</div>
+        <h3>Easy Deployment</h3>
+        <p>One-command container execution and automated deployment stages ensure zero manual friction when launching updates.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DevOps Workflow Section -->
+  <section class="section-container" id="devops">
+    <div class="devops-section">
+      <div class="section-header">
+        <span class="section-badge" style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc;">CI/CD Pipeline</span>
+        <h2 class="section-title">DevOps Automation Workflow</h2>
+        <p class="section-subtitle">How changes flow automatically from source control to the live containerized application.</p>
+      </div>
+
+      <div class="workflow-diagram">
+        <!-- Step 1 -->
+        <div class="workflow-step">
+          <div class="step-icon">🐙</div>
+          <span class="step-badge">Stage 1</span>
+          <h4 class="step-title">GitHub</h4>
+          <p class="step-desc">Developers commit code updates and push to the GitHub repository triggering webhooks.</p>
+        </div>
+
+        <div class="workflow-connector">➔</div>
+
+        <!-- Step 2 -->
+        <div class="workflow-step">
+          <div class="step-icon">⚙️</div>
+          <span class="step-badge">Stage 2</span>
+          <h4 class="step-title">Jenkins</h4>
+          <p class="step-desc">Jenkins checks out the code, validates syntax, tests dependencies, and initiates the build pipeline.</p>
+        </div>
+
+        <div class="workflow-connector">➔</div>
+
+        <!-- Step 3 -->
+        <div class="workflow-step">
+          <div class="step-icon">🐳</div>
+          <span class="step-badge">Stage 3</span>
+          <h4 class="step-title">Docker</h4>
+          <p class="step-desc">A reproducible Docker image is compiled using the <code>Dockerfile</code>, packaging Flask and all dependencies.</p>
+        </div>
+
+        <div class="workflow-connector">➔</div>
+
+        <!-- Step 4 -->
+        <div class="workflow-step">
+          <div class="step-icon">🎓</div>
+          <span class="step-badge">Stage 4</span>
+          <h4 class="step-title">Feedback App</h4>
+          <p class="step-desc">The container runs on port 5000, serving students and faculty in a reliable, production-ready environment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="section-container" id="about">
+    <div class="about-container">
+      <div class="about-grid">
+        <div class="about-text">
+          <span class="section-badge">About The Project</span>
+          <h3>Digital Feedback for Modern Institutions</h3>
+          <p>
+            The <strong>Student Feedback Management System</strong> helps colleges collect, organize, and inspect student reviews digitally. By replacing paper forms and disorganized surveys, it establishes a transparent channel between students and faculty.
+          </p>
+          <p>
+            Built as a real-world demonstration of modern DevOps, this application pairs a lightweight Python Flask backend with automated Continuous Integration & Continuous Delivery using Git, Jenkins, and Docker.
+          </p>
+          <ul class="about-points">
+            <li><span class="check-icon">✓</span> Collects transparent student ratings (1 to 5)</li>
+            <li><span class="check-icon">✓</span> Lightweight and zero-dependency database storage</li>
+            <li><span class="check-icon">✓</span> Complete automated DevOps pipeline integration</li>
+            <li><span class="check-icon">✓</span> Designed specifically for college demonstrations</li>
+          </ul>
+        </div>
+
+        <div class="about-card-badge">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Automated Delivery Pipeline</div>
+          <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #e2e8f0;">
+          <div style="display: flex; justify-content: space-around; text-align: center;">
+            <div>
+              <div style="font-size: 1.5rem; font-weight: 800; color: #1e293b;">3</div>
+              <div style="font-size: 0.85rem; color: #64748b;">DevOps Tools</div>
+            </div>
+            <div>
+              <div style="font-size: 1.5rem; font-weight: 800; color: #1e293b;">&lt; 2 hrs</div>
+              <div style="font-size: 0.85rem; color: #64748b;">Demo Ready</div>
+            </div>
+            <div>
+              <div style="font-size: 1.5rem; font-weight: 800; color: #1e293b;">Port 5000</div>
+              <div style="font-size: 0.85rem; color: #64748b;">Docker Expose</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

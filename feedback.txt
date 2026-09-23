@@ -1,0 +1,28 @@
+Name: Alice Johnson
+Department: Computer Science
+Email: alice.j@college.edu
+Rating: 5
+Feedback: The DevOps and cloud computing practical lab sessions are exceptionally helpful and well-structured!
+Submitted: 2026-09-20 10:15
+---
+Name: Rahul Sharma
+Department: Information Technology
+Email: rahul.s@college.edu
+Rating: 4
+Feedback: Great curriculum and supportive teachers. Adding more hands-on Docker and CI/CD exercises was a great improvement.
+Submitted: 2026-09-22 14:30
+---
+Name: Priya Patel
+Department: Electronics & Communication
+Email: priya.p@college.edu
+Rating: 5
+Feedback: The feedback portal is very intuitive, fast, and easy to access on mobile devices.
+Submitted: 2026-09-23 09:00
+---
+Name: DevOps Tester
+Department: Computer Science & Engineering
+Email: test@college.edu
+Rating: 5
+Feedback: CI/CD testing pipeline verified successfully!
+Submitted: 2026-09-24 03:40
+---

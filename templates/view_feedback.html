@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+
+{% block title %}View Feedback | Student Feedback Management System{% endblock %}
+
+{% block extra_css %}
+<style>
+  .view-wrapper {
+    max-width: 1000px;
+    margin: 3.5rem auto;
+    padding: 0 1.5rem;
+  }
+
+  .view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .view-title-group h1 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--slate-800);
+  }
+
+  .view-title-group p {
+    color: var(--slate-500);
+    font-size: 0.95rem;
+  }
+
+  .feedback-count-badge {
+    background: var(--primary-light);
+    color: var(--primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+  }
+
+  .feedback-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .feedback-card {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1.75rem 2rem;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+  }
+
+  .feedback-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: #cbd5e1;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 0.85rem;
+  }
+
+  .student-info {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+
+  .student-details h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--slate-800);
+    line-height: 1.2;
+  }
+
+  .student-details .dept-badge {
+    display: inline-block;
+    background: #f1f5f9;
+    color: var(--slate-600);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    margin-top: 0.35rem;
+  }
+
+  .card-meta {
+    text-align: right;
+  }
+
+  .rating-stars-view {
+    color: #f59e0b;
+    font-size: 1.15rem;
+    letter-spacing: 2px;
+  }
+
+  .rating-numeric {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--slate-500);
+    margin-left: 0.25rem;
+  }
+
+  .submission-time {
+    font-size: 0.78rem;
+    color: var(--slate-400);
+    margin-top: 0.2rem;
+  }
+
+  .feedback-text {
+    color: var(--slate-700);
+    font-size: 1rem;
+    line-height: 1.65;
+    background: #f8fafc;
+    border-left: 3px solid var(--primary);
+    padding: 0.85rem 1.15rem;
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* Empty State */
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 2px dashed var(--border-color);
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .empty-state h3 {
+    font-size: 1.4rem;
+    color: var(--slate-800);
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-state p {
+    color: var(--slate-500);
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 600px) {
+    .card-top {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .card-meta {
+      text-align: left;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="view-wrapper">
+
+  <div class="view-header">
+    <div class="view-title-group">
+      <h1>
+        Student Feedback Entries
+        <span class="feedback-count-badge">{{ feedbacks|length }} recorded</span>
+      </h1>
+      <p>Real-time records populated from <code>feedback.txt</code>.</p>
+    </div>
+
+    <div>
+      <a href="{{ url_for('feedback') }}" class="btn btn-primary" style="padding: 0.65rem 1.25rem; font-size: 0.95rem;">
+        <span>✍️</span> Submit New Feedback
+      </a>
+    </div>
+  </div>
+
+  {% if feedbacks %}
+    <div class="feedback-list">
+      {% for item in feedbacks %}
+        <div class="feedback-card">
+          <div class="card-top">
+            <div class="student-info">
+              <div class="avatar">
+                {{ item.name[0]|upper if item.name else 'S' }}
+              </div>
+              <div class="student-details">
+                <h3>{{ item.name }}</h3>
+                <span class="dept-badge">{{ item.department }}</span>
+              </div>
+            </div>
+
+            <div class="card-meta">
+              <div>
+                <span class="rating-stars-view">
+                  {% set r = item.rating|int if item.rating.isdigit() else 5 %}
+                  {% for _ in range(r) %}★{% endfor %}{% for _ in range(5 - r) %}☆{% endfor %}
+                </span>
+                <span class="rating-numeric">({{ item.rating }}/5)</span>
+              </div>
+              {% if item.submitted %}
+                <div class="submission-time">🕒 {{ item.submitted }}</div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="feedback-text">
+            "{{ item.feedback }}"
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">📭</div>
+      <h3>No Feedback Submissions Yet</h3>
+      <p>Be the first student to share your academic experience and suggestions.</p>
+      <a href="{{ url_for('feedback') }}" class="btn btn-primary">
+        <span>✍️</span> Submit Feedback
+      </a>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

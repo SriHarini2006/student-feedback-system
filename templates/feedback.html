@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+
+{% block title %}Give Feedback | Student Feedback Management System{% endblock %}
+
+{% block extra_css %}
+<style>
+  .feedback-wrapper {
+    max-width: 680px;
+    margin: 3.5rem auto;
+    padding: 0 1.5rem;
+  }
+
+  .form-card {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    box-shadow: var(--shadow-md);
+  }
+
+  .form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .form-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--slate-800);
+    margin-bottom: 0.5rem;
+  }
+
+  .form-header p {
+    color: var(--slate-500);
+    font-size: 0.95rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--slate-800);
+    margin-bottom: 0.5rem;
+  }
+
+  .required-asterisk {
+    color: #ef4444;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    background: #ffffff;
+    color: var(--slate-800);
+    transition: var(--transition);
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+  }
+
+  textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  /* Rating Selector */
+  .rating-options {
+    display: flex;
+    gap: 0.85rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .rating-label {
+    flex: 1;
+    min-width: 65px;
+    cursor: pointer;
+    text-align: center;
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.65rem 0.5rem;
+    transition: var(--transition);
+    background: #f8fafc;
+    user-select: none;
+  }
+
+  .rating-label input[type="radio"] {
+    display: none;
+  }
+
+  .rating-label .rating-num {
+    font-size: 1.15rem;
+    font-weight: 700;
+    display: block;
+    color: var(--slate-800);
+  }
+
+  .rating-label .rating-stars {
+    font-size: 0.75rem;
+    color: #eab308;
+    display: block;
+    margin-top: 0.2rem;
+  }
+
+  .rating-label:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+  }
+
+  .rating-label:has(input[type="radio"]:checked) {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    box-shadow: 0 0 0 2px var(--primary);
+  }
+
+  .rating-label:has(input[type="radio"]:checked) .rating-num {
+    color: var(--primary);
+  }
+
+  .form-submit-btn {
+    width: 100%;
+    background: var(--primary);
+    color: var(--white);
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 0.9rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    margin-top: 1rem;
+  }
+
+  .form-submit-btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+  }
+
+  /* Success State Card */
+  .success-card {
+    text-align: center;
+    padding: 3rem 2rem;
+  }
+
+  .success-icon {
+    width: 72px;
+    height: 72px;
+    background: #ecfdf5;
+    color: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 1.5rem auto;
+    border: 3px solid #a7f3d0;
+  }
+
+  .success-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #065f46;
+    margin-bottom: 0.75rem;
+  }
+
+  .success-subtitle {
+    color: var(--slate-600);
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
+
+  .success-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-outline {
+    background: #ffffff;
+    color: var(--slate-800);
+    border: 1.5px solid var(--border-color);
+  }
+
+  .btn-outline:hover {
+    background: #f1f5f9;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="feedback-wrapper">
+
+  {% if submitted %}
+    <!-- Success Confirmation View -->
+    <div class="form-card success-card">
+      <div class="success-icon">✓</div>
+      <h2 class="success-title">Feedback Submitted Successfully!</h2>
+      <p class="success-subtitle">
+        Thank you for sharing your thoughts. Your feedback has been securely appended to <code>feedback.txt</code> and is now accessible for review.
+      </p>
+
+      <div class="success-actions">
+        <a href="{{ url_for('index') }}" class="btn btn-outline">
+          <span>🏠</span> Return to Home
+        </a>
+        <a href="{{ url_for('view_feedback') }}" class="btn btn-primary">
+          <span>📋</span> View All Feedback
+        </a>
+        <a href="{{ url_for('feedback') }}" class="btn btn-outline">
+          <span>➕</span> Submit Another
+        </a>
+      </div>
+    </div>
+  {% else %}
+    <!-- Feedback Form View -->
+    <div class="form-card">
+      <div class="form-header">
+        <h1>Student Feedback Form</h1>
+        <p>Your honest feedback empowers faculty and improves department facilities.</p>
+      </div>
+
+      <form action="{{ url_for('feedback') }}" method="POST">
+        
+        <!-- Student Name -->
+        <div class="form-group">
+          <label for="name" class="form-label">
+            Student Full Name <span class="required-asterisk">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            class="form-control" 
+            placeholder="e.g. Alex Morgan"
+            value="{{ form_data.name if form_data else '' }}"
+            required
+          >
+        </div>
+
+        <!-- Department -->
+        <div class="form-group">
+          <label for="department" class="form-label">
+            Department / Branch <span class="required-asterisk">*</span>
+          </label>
+          <select id="department" name="department" class="form-control" required>
+            <option value="" disabled {% if not form_data %}selected{% endif %}>Select your department...</option>
+            <option value="Computer Science & Engineering" {% if form_data and form_data.department == 'Computer Science & Engineering' %}selected{% endif %}>Computer Science & Engineering</option>
+            <option value="Information Technology" {% if form_data and form_data.department == 'Information Technology' %}selected{% endif %}>Information Technology</option>
+            <option value="Electronics & Communication" {% if form_data and form_data.department == 'Electronics & Communication' %}selected{% endif %}>Electronics & Communication</option>
+            <option value="Electrical Engineering" {% if form_data and form_data.department == 'Electrical Engineering' %}selected{% endif %}>Electrical Engineering</option>
+            <option value="Mechanical Engineering" {% if form_data and form_data.department == 'Mechanical Engineering' %}selected{% endif %}>Mechanical Engineering</option>
+            <option value="Civil Engineering" {% if form_data and form_data.department == 'Civil Engineering' %}selected{% endif %}>Civil Engineering</option>
+            <option value="Data Science & AI" {% if form_data and form_data.department == 'Data Science & AI' %}selected{% endif %}>Data Science & AI</option>
+            <option value="Business Administration" {% if form_data and form_data.department == 'Business Administration' %}selected{% endif %}>Business Administration</option>
+          </select>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email" class="form-label">
+            College Email Address <span class="required-asterisk">*</span>
+          </label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            class="form-control" 
+            placeholder="e.g. alex.m@college.edu"
+            value="{{ form_data.email if form_data else '' }}"
+            required
+          >
+        </div>
+
+        <!-- Rating (1 to 5) -->
+        <div class="form-group">
+          <label class="form-label">
+            Overall Experience Rating (1 to 5) <span class="required-asterisk">*</span>
+          </label>
+          <div class="rating-options">
+            <label class="rating-label">
+              <input type="radio" name="rating" value="1" {% if form_data and form_data.rating == '1' %}checked{% endif %} required>
+              <span class="rating-num">1</span>
+              <span class="rating-stars">★☆☆☆☆</span>
+            </label>
+            <label class="rating-label">
+              <input type="radio" name="rating" value="2" {% if form_data and form_data.rating == '2' %}checked{% endif %}>
+              <span class="rating-num">2</span>
+              <span class="rating-stars">★★☆☆☆</span>
+            </label>
+            <label class="rating-label">
+              <input type="radio" name="rating" value="3" {% if form_data and form_data.rating == '3' %}checked{% endif %}>
+              <span class="rating-num">3</span>
+              <span class="rating-stars">★★★☆☆</span>
+            </label>
+            <label class="rating-label">
+              <input type="radio" name="rating" value="4" {% if form_data and form_data.rating == '4' %}checked{% endif %}>
+              <span class="rating-num">4</span>
+              <span class="rating-stars">★★★★☆</span>
+            </label>
+            <label class="rating-label">
+              <input type="radio" name="rating" value="5" {% if not form_data or form_data.rating == '5' %}checked{% endif %}>
+              <span class="rating-num">5</span>
+              <span class="rating-stars">★★★★★</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Feedback Message -->
+        <div class="form-group">
+          <label for="message" class="form-label">
+            Feedback Message <span class="required-asterisk">*</span>
+          </label>
+          <textarea 
+            id="message" 
+            name="message" 
+            class="form-control" 
+            placeholder="Share your detailed feedback on coursework, lab infrastructure, faculty guidance, or suggestions for improvement..." 
+            required>{{ form_data.message if form_data else '' }}</textarea>
+        </div>
+
+        <button type="submit" class="form-submit-btn">
+          <span>🚀</span> Submit Feedback
+        </button>
+      </form>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}
